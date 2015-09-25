@@ -1,0 +1,23 @@
+{
+  "name": "vue-meteor-data",
+  "version": "1.0.0",
+  "description": "Easy subscriptions and reactive queries for Vue and Meteor",
+  "main": "vue-meteor-data.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Grottolabs/vue-meteor-data.git"
+  },
+  "keywords": [
+    "vue",
+    "meteor",
+    "reactivity",
+    "subscriptions",
+    "collections"
+  ],
+  "author": "Jakob Rosenberg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Grottolabs/vue-meteor-data/issues"
+  },
+  "homepage": "https://github.com/Grottolabs/vue-meteor-data#readme"
+}
