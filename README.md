@@ -38,7 +38,7 @@ module.exports = {
     created: function(){
         this.subscribe('tasks/all');
         this.autorun(function(){
-            this.$add('tasks', Tasks.find().fetch())
+            this.$set('tasks', Tasks.find().fetch())
         }.bind(this))
     }
 }
