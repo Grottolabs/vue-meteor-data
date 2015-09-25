@@ -23,7 +23,7 @@
  *       created: function(){
  *           this.subscribe('tasks/all');
  *           this.autorun(function(){
- *               this.$add('tasks', Tasks.find().fetch())
+ *               this.$set('tasks', Tasks.find().fetch())
  *           }.bind(this))
  *       }
  *   }
@@ -50,7 +50,7 @@
       if (reactiveData = this.$options.reactiveData) {
         for (var key of Object.keys(reactiveData)){
           var handle = Tracker.autorun(function(){
-            self.$add(key, reactiveData[key]());
+            self.$set(key, reactiveData[key]());
           })
           self._meteorHandles.push(handle);
         }
