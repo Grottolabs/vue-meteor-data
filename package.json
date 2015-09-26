@@ -1,6 +1,6 @@
 {
   "name": "vue-meteor-data",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Easy subscriptions and reactive queries for Vue and Meteor",
   "main": "vue-meteor-data.js",
   "repository": {
@@ -14,10 +14,18 @@
     "subscriptions",
     "collections"
   ],
-  "author": "Jakob Rosenberg",
+  "author": {
+    "name": "Jakob Rosenberg"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Grottolabs/vue-meteor-data/issues"
   },
-  "homepage": "https://github.com/Grottolabs/vue-meteor-data#readme"
+  "homepage": "https://github.com/Grottolabs/vue-meteor-data#readme",
+  "readme": "#Vue Meteor Data\r\n\r\n####Easy subscriptions and reactive queries for Vue and Meteor\r\n \r\n\r\nInstallation:\r\n```javascript\r\nvar VueMeteorData = require ('vue-meteor-data');\r\nVue.use(VueMeteorData);\r\n      \r\n```\r\n \r\n \r\nUsage example 1:\r\n  \r\n```javascript\r\n\r\nmodule.exports = {\r\n  \r\n    reactiveData   : {\r\n        tasks: function () {\r\n            return Tasks.find().fetch()\r\n        }\r\n    },\r\n\r\n    created: function(){\r\n        this.subscribe('tasks/all');\r\n    }\r\n}\r\n    \r\n```\r\n\r\n\r\nUsage example 2:\r\n\r\n```javascript    \r\nmodule.exports = {\r\n    created: function(){\r\n        this.subscribe('tasks/all');\r\n        this.autorun(function(){\r\n            this.$set('tasks', Tasks.find().fetch())\r\n        }.bind(this))\r\n    }\r\n}\r\n```\r\n \r\n",
+  "readmeFilename": "README.md",
+  "_id": "vue-meteor-data@1.0.1",
+  "scripts": {},
+  "_shasum": "5e309794c2096556484e1150ed254fe29f9341b8",
+  "_from": "vue-meteor-data@*"
 }
