@@ -34,39 +34,40 @@
 
   var meteorData = {
 
-    created  : function () {
-      var self = this;
+    created: function () {
+      var VueComponent = this;
       this._meteorHandles = [];
 
       /**
        * Wrap all queries in Tracker.autorun
        * Usage example:
        *     reactiveData: {
-       *       tasks: function () {
+       *       tasks: function (component) {
+       *         this.subscribe('myPubliation');
        *         return Tasks.find().fetch()
        *       }
        *     }
        */
       if (reactiveData = this.$options.reactiveData) {
-        for (var key of Object.keys(reactiveData)){
-          var handle = Tracker.autorun(function(){
-            self.$set(key, reactiveData[key]());
+        for (var key of Object.keys(reactiveData)) {
+          var reactiveFunction = reactiveData[ key ];
+          var handle = Tracker.autorun(function () {
+            VueComponent.$set(key, reactiveFunction(VueComponent));
           })
-          self._meteorHandles.push(handle);
+          VueComponent._meteorHandles.push(handle);
         }
       }
     },
 
     destroyed: function () {
       //Stop all Meteor reactivity when view is destroyed.
-      this._meteorHandles.forEach(function(sub){
+      this._meteorHandles.forEach(function (sub) {
         sub.stop();
       })
     },
 
 
-
-    methods  : {
+    methods: {
       /**
        * Subscription that automatically stop when view is destroyed
        * Usage example:
@@ -75,7 +76,7 @@
        *     }
        * @returns {*}
        */
-      subscribe: function(){
+      subscribe: function () {
         var handle = Meteor.subscribe.apply(this, arguments);
         this._meteorHandles.push(handle);
         return handle;
@@ -93,7 +94,7 @@
        *     }
        * @returns {Tracker.Computation}
        */
-      autorun: function(){
+      autorun: function () {
         var handle = Tracker.autorun.apply(this, arguments);
         this._meteorHandles.push(handle);
         return handle;
@@ -102,7 +103,6 @@
     }
 
   }
-
 
 
   var api = {
