@@ -1,6 +1,6 @@
 {
   "name": "vue-meteor-data",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Easy subscriptions and reactive queries for Vue and Meteor",
   "main": "vue-meteor-data.js",
   "repository": {
