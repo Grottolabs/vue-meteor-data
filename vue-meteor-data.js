@@ -28,39 +28,40 @@
  *       }
  *   }
  */
+var Vue = require('vue')
 
-module.exports =  {
+module.exports = {
 
   created: function () {
-    var VueComponent = this;
-    this._meteorHandles = [];
+    var vm = this;
+    this._trackerHandles = [];
 
     /**
      * Wrap all queries in Tracker.autorun
      * Usage example:
      *     reactiveData: {
-       *       tasks: function (component) {
-       *         this.subscribe('myPubliation');
-       *         return Tasks.find().fetch()
-       *       }
-       *     }
+     *       tasks: function (component) {
+     *         this.subscribe('myPubliation');
+     *         return Tasks.find().fetch()
+     *       }
+     *     }
      */
     var reactiveData = this.$options.reactiveData
     if (reactiveData) {
-      for (var key of Object.keys(reactiveData)) {
-        var reactiveFunction = reactiveData[ key ].bind(VueComponent);
-        var handle = Tracker.autorun(function () {
-          VueComponent.$set(key, reactiveFunction(VueComponent));
+      for (var key in reactiveData) {
+        var reactiveFunction = reactiveData[ key ].bind(vm);
+        Vue.util.defineReactive(vm, key, null)
+        vm.autorun(function () {
+          vm[ key ] = reactiveFunction(vm);
         })
-        VueComponent._meteorHandles.push(handle);
       }
     }
   },
 
   destroyed: function () {
-    //Stop all Meteor reactivity when view is destroyed.
-    this._meteorHandles.forEach(function (sub) {
-      sub.stop();
+    //Stop all reactivity when view is destroyed.
+    this._trackerHandles.forEach(function (tracker) {
+      tracker.stop();
     })
   },
 
@@ -76,25 +77,50 @@ module.exports =  {
      */
     subscribe: function () {
       var handle = Meteor.subscribe.apply(this, arguments);
-      this._meteorHandles.push(handle);
+      this._trackerHandles.push(handle);
       return handle;
     },
 
 
     /**
-     * Autorun that automatically stops when view is destroyed
+     * Autorun - automatically stops when view is destroyed
      *
      * Usage example:
      *     created: function(){
-       *       this.autorun(function(){
-       *         this.myvar = myReactiveFunction();
-       *       }.bind(this)
-       *     }
-     * @returns {Tracker.Computation}
+     *       var handle = this.autorun(function(){
+     *         this.myvar = myReactiveFunction();
+     *       }.bind(this);
+     *       ...
+     *       handle.stop();
+     *     }
+     * @param reactiveFunction
+     * @returns {{_meteor: Tracker.Computation, _vue: Function, stop: handle.stop}}
      */
-    autorun: function () {
-      var handle = Tracker.autorun.apply(this, arguments);
-      this._meteorHandles.push(handle);
+    autorun: function (reactiveFunction) {
+      var vm = this;
+
+      var handle = {
+        _meteor: {},  //placeholder
+        _vue   : function () {
+        },  //placeholder
+        stop   : function () {
+          this._meteor.stop();
+          this._vue();
+        }
+      };
+
+
+      handle._meteor = Tracker.autorun(function () {
+
+        //calls watcher.teardown() to avoid creation of duplicate watchers
+        handle._vue()
+
+        handle._vue = vm.$watch(reactiveFunction)
+
+      });
+
+      this._trackerHandles.push(handle);
+
       return handle;
     }
 
