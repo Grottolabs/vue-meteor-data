@@ -1,16 +1,18 @@
 #Vue Meteor Data
 
-####Easy subscriptions and reactive queries for Vue and Meteor
- 
+##Easy subscriptions and reactive queries for Vue and Meteor
 
-Installation:
+When a view is created, the mixin iterates through your reactive data and wraps it individually in Vue's vm.$watch. Then each of these wrappers are wrapped in Meteor's Tracker.autorun.
+
+
+####Installation
 ```javascript
 var VueMeteorData = require ('vue-meteor-data')
 Vue.mixin(VueMeteorData)      
 ```
  
  
-Usage example 1:  
+####Usage example 1
 ```javascript
 module.exports = {  
     reactiveData   : {
@@ -25,7 +27,7 @@ module.exports = {
 ```
 
 
-Usage example 2:
+####Usage example 2
 ```javascript    
 module.exports = {
     created: function(){
@@ -38,7 +40,7 @@ module.exports = {
 ```
  
  
-Usage example 3 with VueRouter:
+####Usage example 3 with VueRouter
 ```javascript
 module.exports = {  
     reactiveData   : {
@@ -53,7 +55,7 @@ module.exports = {
 ```
 
 
-Usage example 4:
+####Usage example 4
 ```javascript
 module.exports = {  
     reactiveData   : {
