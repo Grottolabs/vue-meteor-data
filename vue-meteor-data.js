@@ -50,10 +50,12 @@ module.exports = {
     if (reactiveData) {
       for (var key in reactiveData) {
         var reactiveFunction = reactiveData[ key ].bind(vm);
-        Vue.util.defineReactive(vm, key, null)
-        vm.autorun(function () {
-          vm[ key ] = reactiveFunction(vm);
-        })
+        Vue.util.defineReactive(vm, key, null);
+        (function(key, reactiveFunction){
+          vm._trackerHandles.push(vm.autorun(function () {
+            vm.$set(key, reactiveFunction(vm));
+          }));
+        })(key, reactiveFunction);
       }
     }
   },
